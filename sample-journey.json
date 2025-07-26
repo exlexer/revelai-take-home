@@ -1,0 +1,101 @@
+{
+  "id": "patient-onboarding-001",
+  "name": "Patient Onboarding Journey",
+  "start_node_id": "check_age",
+  "nodes": [
+    {
+      "id": "check_age",
+      "type": "CONDITIONAL",
+      "condition": {
+        "field": "age",
+        "operator": ">=",
+        "value": 18
+      },
+      "on_true_next_node_id": "adult_consent",
+      "on_false_next_node_id": "guardian_consent"
+    },
+    {
+      "id": "adult_consent",
+      "type": "ACTION",
+      "actionType": "LOG",
+      "message": "Sending adult consent form to patient",
+      "next_node_id": "wait_for_consent"
+    },
+    {
+      "id": "guardian_consent",
+      "type": "ACTION",
+      "actionType": "LOG",
+      "message": "Sending guardian consent form for minor patient",
+      "next_node_id": "wait_for_consent"
+    },
+    {
+      "id": "wait_for_consent",
+      "type": "DELAY",
+      "duration_seconds": 300,
+      "next_node_id": "check_condition"
+    },
+    {
+      "id": "check_condition",
+      "type": "CONDITIONAL",
+      "condition": {
+        "field": "condition",
+        "operator": "==",
+        "value": "hip_replacement"
+      },
+      "on_true_next_node_id": "hip_replacement_info",
+      "on_false_next_node_id": "knee_replacement_info"
+    },
+    {
+      "id": "hip_replacement_info",
+      "type": "ACTION",
+      "actionType": "LOG",
+      "message": "Sending hip replacement preparation materials",
+      "next_node_id": "check_language"
+    },
+    {
+      "id": "knee_replacement_info",
+      "type": "ACTION",
+      "actionType": "LOG",
+      "message": "Sending knee replacement preparation materials",
+      "next_node_id": "check_language"
+    },
+    {
+      "id": "check_language",
+      "type": "CONDITIONAL",
+      "condition": {
+        "field": "language",
+        "operator": "==",
+        "value": "es"
+      },
+      "on_true_next_node_id": "spanish_welcome",
+      "on_false_next_node_id": "english_welcome"
+    },
+    {
+      "id": "spanish_welcome",
+      "type": "ACTION",
+      "actionType": "LOG",
+      "message": "Bienvenido! Su cita está programada.",
+      "next_node_id": "final_delay"
+    },
+    {
+      "id": "english_welcome",
+      "type": "ACTION",
+      "actionType": "LOG",
+      "message": "Welcome! Your appointment has been scheduled.",
+      "next_node_id": "final_delay"
+    },
+    {
+      "id": "final_delay",
+      "type": "DELAY",
+      "duration_seconds": 86400,
+      "next_node_id": "reminder"
+    },
+    {
+      "id": "reminder",
+      "type": "ACTION",
+      "actionType": "LOG",
+      "message": "Reminder: Your appointment is tomorrow. Please bring your ID and insurance card.",
+      "next_node_id": null
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+export const prismaMock = {
+  journey: {
+    create: jest.fn(),
+    findUnique: jest.fn(),
+    findMany: jest.fn(),
+    update: jest.fn(),
+    delete: jest.fn(),
+    deleteMany: jest.fn(),
+  },
+  journeyNode: {
+    create: jest.fn(),
+    createMany: jest.fn(),
+    findUnique: jest.fn(),
+    findMany: jest.fn(),
+    update: jest.fn(),
+    delete: jest.fn(),
+    deleteMany: jest.fn(),
+  },
+  journeyToNode: {
+    create: jest.fn(),
+    createMany: jest.fn(),
+    deleteMany: jest.fn(),
+  },
+  run: {
+    create: jest.fn(),
+    findUnique: jest.fn(),
+    findMany: jest.fn(),
+    update: jest.fn(),
+    delete: jest.fn(),
+    deleteMany: jest.fn(),
+  },
+  executionLog: {
+    create: jest.fn(),
+    findMany: jest.fn(),
+    deleteMany: jest.fn(),
+  },
+  $connect: jest.fn(),
+  $disconnect: jest.fn(),
+  $transaction: jest.fn(),
+};

@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model JourneyNode {
+  id          String   @id @default(uuid())
+  type        NodeType
+  definition  Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  journeys    JourneyNodes[]
+  startJourneys Journey[]
+  executionLogs ExecutionLog[]
+}
+
+model Journey {
+  id          String   @id @default(uuid())
+  name        String
+  startNode   JourneyNode @relation(fields: [startNodeId], references: [id])
+  startNodeId String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  runs        Run[]
+  nodes       JourneyNodes[]
+}
+
+model JourneyNodes {
+  journey   Journey  @relation(fields: [journeyId], references: [id])
+  journeyId String
+  node      JourneyNode @relation(fields: [nodeId], references: [id])
+  nodeId    String
+
+  @@index([journeyId, nodeId])
+  @@id([journeyId, nodeId])
+}
+
+model Run {
+  id              String   @id @default(uuid())
+  journey         Journey  @relation(fields: [journeyId], references: [id])
+  journeyId       String
+  status          RunStatus
+  currentNodeId   String?
+  patientContext  Json
+  startedAt       DateTime @default(now())
+  completedAt     DateTime?
+
+  executionLogs   ExecutionLog[]
+}
+
+model ExecutionLog {
+  id            String   @id @default(uuid())
+  run           Run      @relation(fields: [runId], references: [id])
+  runId         String
+  node          JourneyNode @relation(fields: [nodeId], references: [id])
+  nodeId        String
+  status        String   // success, failed, skipped
+  message       String?
+  createdAt     DateTime @default(now())
+
+  executedAt    DateTime @default(now())
+}
+
+enum NodeType {
+  LOG
+  DELAY
+  CONDITIONAL
+}
+
+enum RunStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+}
