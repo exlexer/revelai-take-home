@@ -1,5 +1,7 @@
 # Patient Journey Automation Platform
 
+https://github.com/user-attachments/assets/c2826f00-08bd-49ee-99fb-fb4fb8556528
+
 ## 🏗️ Architecture
 
 ```
